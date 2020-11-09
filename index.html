@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
+    <link rel="stylesheet" href="dist/theme/moon.css" id="theme">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h3>.net core</h3>
+                <h4>
+                    <a target="blank" href="https://dotnet.microsoft.com/download">https://dotnet.microsoft.com/download</a>
+                </h4>
+            </section>
+            <section>
+                <section>
+                    <h3>.net core cli</h3>
+                    <h4>
+                        <a target="blank" href="https://docs.microsoft.com/en-us/dotnet/core/tools/">https://docs.microsoft.com/en-us/dotnet/core/tools/</a>
+                    </h4>
+                </section>
+                <section>
+                    <h3>Basic commands</h3>
+                    <ul>
+                        <li>new</li>
+                        <li>restore</li>
+                        <li>build</li>
+                        <li>run</li>
+                        <li>test</li>
+                        <li>clean</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Creating new application</h3>
+                    <ul>
+                        <li>dotnet new mvc -n FirstProject</li>
+                        <li>dotnet add package Swashbuckle.AspNetCore.Swagger --version 5.6.3</li>
+                        <li>dotnet build</li>
+                        <li>dotnet run</li>
+                    </ul>
+                </section>
+            </section>
+            <section>
+                <h3>Scaffold</h3>
+                <ul>
+                    <li>Microsoft.AspNetCore</li>
+                    <li>Startup</li>
+                    <li>appsettings.json</li>
+                </ul>
+            </section>
+            <section>
+                <section>
+                    <h3>Cross-Platform</h3>
+                    <h4>Docker (Linux)</h4>
+                    <pre>
+                        <code data-trim data-noescape>
+                            FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
+                            WORKDIR /app
+
+                            # Copy csproj and restore as distinct layers
+                            COPY *.csproj ./
+                            RUN dotnet restore
+
+                            # Copy everything else and build
+                            COPY . ./
+                            RUN dotnet publish -c Release -o out
+
+                            # Build runtime image
+                            FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+                            WORKDIR /app
+                            COPY --from=build-env /app/out .
+                            ENTRYPOINT ["dotnet", "FirstApp.dll"]
+                        </code>
+                    </pre>
+                </section>
+                <section>
+                    <h4>Dockerize an ASP.NET Core application</h4>
+                    <a target="blank" href="https://docs.docker.com/engine/examples/dotnetcore/">https://docs.docker.com/engine/examples/dotnetcore/</a>
+                    <pre>
+                        <code data-trim data-noescape>
+                            $ docker build -t firstapp .
+                            $ docker run -d -p 8080:80 --name myapp firstapp
+                        </code>
+                    </pre>
+                </section>
+            </section>
+            <section>
+                <h3>Compatibilities</h3>
+                <a target="blank" href="https://docs.microsoft.com/en-us/dotnet/standard/net-standard">.net standard compatibility table</a>
+            </section>
+        </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+        // More info about initialization & config:
+        // - https://revealjs.com/initialization/
+        // - https://revealjs.com/config/
+        Reveal.initialize({
+            hash: true,
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+        });
+    </script>
+</body>
+
+</html>
